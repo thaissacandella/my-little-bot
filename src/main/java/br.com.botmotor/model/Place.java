@@ -3,12 +3,13 @@ package br.com.botmotor.model;
 import se.walkercrou.places.Status;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
 
 /**
  * @author "<a href='jpbassinello@gmail.com'>João Paulo Bassinello</a>"
  */
-public final class Place {
+public final class Place implements Comparable<Place> {
 	private final String name;
 	private final List<String> types;
 	private final String address;
@@ -113,5 +114,11 @@ public final class Place {
 				", rating=" + rating +
 				", distanceBetweenOrigin=" + distanceBetweenOrigin +
 				'}';
+	}
+
+	@Override
+	public int compareTo(Place o) {
+		return Comparator.comparing(Place::getDistanceBetweenOrigin)
+				.thenComparing(Place::getRating).compare(this, o);
 	}
 }
