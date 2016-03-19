@@ -18,10 +18,15 @@ public class Main {
 
 	private static final Set<Long> IDS = new HashSet<>();
 	private static MainBot BOT = new MainBot();
+	private static ThaBot THA_BOT = new ThaBot();
 	// TODO: alterar antes da apresentação
 	private static int LAST_MESSAGE = 1014;
+	private static final boolean THA_MODE = false;
 
 	public static void main(String[] args) throws Exception {
+		if (THA_MODE) {
+			sendResponse(147976380, "HUM!! A noite tá tranquila, tá favorável para dar uma volta, não!? Posso sugerir lugares perto de você?");
+		}
 		while (true) {
 			String updates = getUpdates();
 			JsonObject obj = parse(updates);
@@ -39,6 +44,11 @@ public class Main {
 
 				if (m == null) {
 					// não sabemos que tipo de mensagem é. Continuando.
+					continue;
+				}
+				if (147976380 == m.getUserId() && THA_MODE) {
+					String bla = THA_BOT.process(m);
+					sendResponse(m.getUserId(), bla);
 					continue;
 				}
 
