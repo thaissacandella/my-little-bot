@@ -18,7 +18,7 @@ public class Main {
 	private static final Set<Long> IDS = new HashSet<>();
 	private static MainBot BOT = new MainBot();
 	// TODO: alterar antes da apresentação
-	private static int LAST_MESSAGE = 446;
+	private static int LAST_MESSAGE = 514;
 
 	public static void main(String[] args) throws Exception {
 		while (true) {

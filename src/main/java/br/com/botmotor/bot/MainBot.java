@@ -51,6 +51,7 @@ public class MainBot {
 
 			UserSession sessao = dados.get(messageText.getUserId());
 
+			System.out.println("------------------------" + sessao.getEtapa());
 			if (sessao.getEtapa() == Etapa.ESCOLHA_TIPO_LOCAL) {
 				if (!Pattern.matches("/\\d", messageText.getText())) {
 					return "\n" +
@@ -80,19 +81,19 @@ public class MainBot {
 				return "Envie a sua localização";
 			}
 
-			System.out.println(sessao.getEtapa());
+		} else if (m instanceof MessageLocation) {
+			UserSession sessao = dados.get(m.getUserId());
+			if (sessao == null) {
+				return null;
+			}
 			if (sessao.getEtapa() == Etapa.ENVIE_LOCALIZ) {
-				if (m instanceof MessageLocation) {
-					sessao.setLocation((MessageLocation) m);
-					sessao.setEtapa(Etapa.ESCOLHA_LOCAL);
-					System.out.println("-----------------------------------------------");
-					return "Lista de lugares por lugar.";
-				} else {
-					return "Você deve enviar uma localização, moço.";
-				}
+				sessao.setLocation((MessageLocation) m);
+				sessao.setEtapa(Etapa.ESCOLHA_LOCAL);
+				System.out.println("-----------------------------------------------");
+				return "Lista de lugares por lugar.";
 			}
 		}
 
-		return "else";
+		return null;
 	}
 }
