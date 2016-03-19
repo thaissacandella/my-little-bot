@@ -18,22 +18,18 @@ import java.util.Set;
 public class Main {
 
     private static final Set<Long> ids = new HashSet<Long>();
-    private static Bot bot = new SimpleBot();
-
-    public static class SimpleBot implements Bot {
-
-        public String process(Message m) {
-            return m.getUser() + ": " + m.getMessage();
-        }
-    }
+    private static Bot bot = new MainBot();
+    private static int LAST_MESSAGE = 130;
 
     public static void main(String[] args) throws IOException, InterruptedException {
         while (true) {
+
             String result = getUpdates();
             JsonObject obj = (JsonObject) new JsonParser().parse(result);
             for (JsonElement e : obj.get("result").getAsJsonArray()) {
                 JsonObject message = e.getAsJsonObject().get("message").getAsJsonObject();
-                if (ids.contains(message.get("message_id").getAsLong())) {
+                Long id = message.get("message_id").getAsLong();
+                if (id < LAST_MESSAGE || ids.contains(id)) {
                     continue;
                 }
                 ids.add(message.get("message_id").getAsLong());
