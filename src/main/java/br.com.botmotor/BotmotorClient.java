@@ -16,20 +16,24 @@ import javax.ws.rs.HttpMethod;
 public final class BotmotorClient {
 
 	private static final String BASE_URL = "https://api.telegram.org/";
+	private static final String BOT_TOKEN =
+			"bot198737376:AAFrs1DR7fBwsYvKj_jDW6lZvwlOULFE9Y0";
 	private static final String DEFAULT_CHARSET = "UTF-8";
 	private static final int TIMEOUT = 20000;
-
-	private final String botToken;
 	private String endpoint;
-	private String httpMethod;
+	private String HTTP_METHOD = HttpMethod.GET;
+	private String getParameters;
 
-	public BotmotorClient(String botToken) {
-		this.botToken = botToken;
+	public BotmotorClient() {
 	}
 
 	public BotmotorClient withEndpoint(String endpoint) {
 		this.endpoint = endpoint;
-		this.httpMethod = HttpMethod.GET;
+		return this;
+	}
+
+	public BotmotorClient withGetParameters(String parameters) {
+		this.getParameters = parameters;
 		return this;
 	}
 
@@ -45,16 +49,13 @@ public final class BotmotorClient {
 
 	private void reset() {
 		this.endpoint = null;
-		this.httpMethod = null;
+		this.HTTP_METHOD = null;
 	}
 
 	private ClientResponse makeRequest() {
-
-		WebResource webResource = buildClient().resource(BASE_URL + botToken +
-				endpoint);
-
-		return webResource
-				.method(httpMethod, ClientResponse.class);
+		WebResource webResource = buildClient().resource(BASE_URL + BOT_TOKEN +
+				endpoint + getParameters);
+		return webResource.method(HTTP_METHOD, ClientResponse.class);
 	}
 
 	private Client buildClient() {

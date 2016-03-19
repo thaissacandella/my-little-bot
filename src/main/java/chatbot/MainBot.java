@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 public class MainBot implements Bot {
 
-    private Map<Long, UserSession> dados = new HashMap<Long, UserSession>();
+    private final Map<Long, UserSession> dados = new HashMap<>();
 
     public String process(Message m) {
 
