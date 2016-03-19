@@ -1,21 +1,16 @@
 package br.com.botmotor;
 
-import br.com.botmotor.BotmotorClient;
 import br.com.botmotor.bot.Bot;
 import br.com.botmotor.bot.MainBot;
 import br.com.botmotor.bot.Message;
 import br.com.botmotor.bot.Response;
+import br.com.botmotor.service.BotmotorClient;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClientBuilder;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URLEncoder;
 import java.util.HashSet;
 import java.util.Set;
@@ -29,10 +24,10 @@ public class Main {
 	public static void main(
 			String[] args) throws IOException, InterruptedException {
 		while (true) {
-
 			String result = getUpdates();
-			JsonObject obj = (JsonObject) new JsonParser().parse(result);
-			for (JsonElement e : obj.get("result").getAsJsonArray()) {
+			JsonObject obj = parse(result);
+			final JsonArray array = obj.get("result").getAsJsonArray();
+			for (JsonElement e : array) {
 				JsonObject message = e.getAsJsonObject().get("message")
 						.getAsJsonObject();
 				Long id = message.get("message_id").getAsLong();
@@ -55,6 +50,10 @@ public class Main {
 
 	}
 
+	private static JsonObject parse(String result) {
+		return (JsonObject) new JsonParser().parse(result);
+	}
+
 	private static void sendLocation(long chatId, double latitude,
 			double longitude) {
 		BotmotorClient client = new BotmotorClient().withEndpoint
@@ -67,42 +66,22 @@ public class Main {
 
 	private static void sendResponse(Long chatId,
 			String text) throws IOException {
-		String url = "https://api.telegram" +
-				".org/bot198737376:AAFrs1DR7fBwsYvKj_jDW6lZvwlOULFE9Y0" +
-				"/sendmessage?chat_id=" + chatId + "&text=" + URLEncoder
-				.encode(text, "UTF-8");
 
-		HttpClient client = HttpClientBuilder.create().build();
-		HttpGet request = new HttpGet(url);
+		BotmotorClient client = new BotmotorClient().withEndpoint
+				("/sendmessage").withGetParameters("?chat_id=" + chatId +
+				"&text=" + URLEncoder.encode(text, "UTF-8"));
 
-		// add request header
-		HttpResponse response = client.execute(request);
+		String response = client.getSingleResult(String.class);
 		System.out.println(response);
 	}
 
-	private static String getUpdates() throws IOException {
-		String url = "https://api.telegram" +
-				".org/bot198737376:AAFrs1DR7fBwsYvKj_jDW6lZvwlOULFE9Y0" +
-				"/getupdates";
+	private static String getUpdates() {
+		BotmotorClient client = new BotmotorClient().withEndpoint
+				("/getupdates");
 
-		HttpClient client = HttpClientBuilder.create().build();
-		HttpGet request = new HttpGet(url);
-
-		// add request header
-		HttpResponse response = client.execute(request);
-
-		System.out.println("Response Code : " + response.getStatusLine()
-				.getStatusCode());
-
-		BufferedReader rd = new BufferedReader(new InputStreamReader(response
-				.getEntity().getContent()));
-
-		StringBuffer result = new StringBuffer();
-		String line;
-		while ((line = rd.readLine()) != null) {
-			result.append(line);
-		}
-		return result.toString();
+		String response = client.getSingleResult(String.class);
+		System.out.println(response);
+		return response;
 	}
 
 }

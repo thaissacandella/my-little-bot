@@ -5,5 +5,5 @@ package br.com.botmotor.bot;
  */
 public enum Etapa {
 
-    ESCOLHA_TIPO_LOCAL, ENVIE_LOCALIZ, ESCOLHA_LOCAL;
+	ESCOLHA_TIPO_LOCAL, ENVIE_LOCALIZ, ESCOLHA_LOCAL;
 }
