@@ -19,7 +19,7 @@ public class Main {
 
 	private static final Set<Long> ids = new HashSet<>();
 	private static Bot bot = new MainBot();
-	private static int LAST_MESSAGE = 330;
+	private static int LAST_MESSAGE = 323;
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 		while (true) {
@@ -63,7 +63,6 @@ public class Main {
 				"&latitude=" + latitude + "&longitude=" + longitude);
 
 		String response = client.getSingleResult(String.class);
-		System.out.println(response);
 	}
 
 	private static void sendResponse(Long chatId,
@@ -82,7 +81,6 @@ public class Main {
 				("/getupdates");
 
 		String response = client.getSingleResult(String.class);
-		System.out.println(response);
 		return response;
 	}
 
