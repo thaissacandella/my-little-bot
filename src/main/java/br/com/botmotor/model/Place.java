@@ -135,8 +135,9 @@ public final class Place implements Comparable<Place> {
 	public String toDetail() {
 		String s = "Nome: " + this.name + "\n";
 		s += "Distância: " + this.distanceBetweenOrigin.intValue() + " m\n";
-		s += "Rating: " + this.rating + "\n";
-		s += "Quero chegar lá:\n/Sim, com certeza\n/Não, mostre-me mais";
+		if (this.rating.doubleValue() > 0) {
+			s += "Rating: " + this.rating + "\n";
+		}
 		return s;
 	}
 

@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashSet;
 import java.util.List;
@@ -18,7 +19,7 @@ public class Main {
 	private static final Set<Long> IDS = new HashSet<>();
 	private static MainBot BOT = new MainBot();
 	// TODO: alterar antes da apresentação
-	private static int LAST_MESSAGE = 878;
+	private static int LAST_MESSAGE = 987;
 
 	public static void main(String[] args) throws Exception {
 		while (true) {
@@ -46,13 +47,15 @@ public class Main {
 					continue;
 				}
 				for (Response r : rs) {
-
 					switch (r.getResponseType()) {
 						case TEXT:
 							sendResponse(m.getUserId(), r.getTexto());
 							break;
 						case LOCATION:
 							sendLocation(m.getUserId(), r.getLatitude(), r.getLongitude());
+							break;
+						case PHOTO:
+							sendPhoto(m.getUserId(), r.getPhoto());
 							break;
 					}
 				}
@@ -87,10 +90,10 @@ public class Main {
 		return (JsonObject) new JsonParser().parse(result);
 	}
 
-	private static void sendPhoto(long chatId, String photoUrl) {
+	private static void sendPhoto(long chatId, String photoUrl) throws UnsupportedEncodingException {
 		BotmotorClient client = new BotmotorClient().withEndpoint
 				("/sendPhoto").withGetParameters("?chat_id=" + chatId +
-				"&photo=" + photoUrl);
+				"&photo=" + URLEncoder.encode(photoUrl, "UTF-8"));
 
 		String response = client.getSingleResult(String.class);
 		System.out.println(response);
