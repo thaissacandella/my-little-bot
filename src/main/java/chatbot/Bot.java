@@ -1,8 +1,6 @@
 package chatbot;
 
-import java.util.List;
-
 public interface Bot {
 
-    public List<String> process(Message m);
+    String process(Message m);
 }

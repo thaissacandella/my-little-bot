@@ -1,6 +1,5 @@
 package chatbot;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -8,15 +7,12 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
-import sun.java2d.pipe.SpanShapeRenderer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URLEncoder;
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class Main {
@@ -26,8 +22,8 @@ public class Main {
 
     public static class SimpleBot implements Bot {
 
-        public List<String> process(Message m) {
-            return Arrays.asList(m.getUser() + ": " + m.getMessage());
+        public String process(Message m) {
+            return m.getUser() + ": " + m.getMessage();
         }
     }
 
@@ -45,8 +41,8 @@ public class Main {
                 Long user = message.get("chat").getAsJsonObject().get("id").getAsLong();
 
                 Message m = new Message(user, text);
-                List<String> r = bot.process(m);
-                sendResponse(m.getUser(), r.get(0).toString());
+                String r = bot.process(m);
+                sendResponse(m.getUser(), r);
             }
 
             Thread.sleep(1000);
