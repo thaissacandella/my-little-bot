@@ -1,7 +1,6 @@
 package br.com.botmotor;
 
 import br.com.botmotor.bot.*;
-import br.com.botmotor.model.Place;
 import br.com.botmotor.service.BotmotorClient;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -18,7 +17,7 @@ public class Main {
 	private static final Set<Long> IDS = new HashSet<>();
 	private static MainBot BOT = new MainBot();
 	// TODO: alterar antes da apresentação
-	private static int LAST_MESSAGE = 648;
+	private static int LAST_MESSAGE = 809;
 
 	public static void main(String[] args) throws Exception {
 		while (true) {
@@ -30,6 +29,7 @@ public class Main {
 						.getAsJsonObject();
 				Long id = message.get("message_id").getAsLong();
 				if (id < LAST_MESSAGE || IDS.contains(id)) {
+					System.out.println("Ignoring " + id);
 					continue;
 				}
 				IDS.add(id);
@@ -42,6 +42,9 @@ public class Main {
 				}
 
 				Response r = BOT.process(m);
+				if (r == null) {
+					continue;
+				}
 
 				switch (r.getResponseType()) {
 					case TEXT:
@@ -81,6 +84,15 @@ public class Main {
 		return (JsonObject) new JsonParser().parse(result);
 	}
 
+	private static void sendPhoto(long chatId, String photoUrl) {
+		BotmotorClient client = new BotmotorClient().withEndpoint
+				("/sendPhoto").withGetParameters("?chat_id=" + chatId +
+				"&photo=" + photoUrl);
+
+		String response = client.getSingleResult(String.class);
+		System.out.println(response);
+	}
+
 	private static void sendLocation(long chatId, double latitude,
 			double longitude) {
 		BotmotorClient client = new BotmotorClient().withEndpoint
@@ -88,15 +100,17 @@ public class Main {
 				"&latitude=" + latitude + "&longitude=" + longitude);
 
 		String response = client.getSingleResult(String.class);
+		System.out.println(response);
 	}
 
-	private static void sendResponse(Long chatId,
+	private static void sendResponse(long chatId,
 			String text) throws IOException {
 		System.out.println(chatId + ": " + text);
 
 		BotmotorClient client = new BotmotorClient().withEndpoint
 				("/sendmessage").withGetParameters("?chat_id=" + chatId +
-				"&text=" + (text == null ? "null" : URLEncoder.encode(text, "UTF-8")));
+				"&text=" + (text == null ? "null" : URLEncoder.encode(text,
+				"UTF-8")));
 
 		String response = client.getSingleResult(String.class);
 		System.out.println(response);
@@ -104,7 +118,7 @@ public class Main {
 
 	private static String getUpdates() {
 		BotmotorClient client = new BotmotorClient().withEndpoint
-				("/getupdates");
+				("/getupdates").withGetParameters("?offset=" + LAST_MESSAGE);
 
 		String response = client.getSingleResult(String.class);
 		return response;

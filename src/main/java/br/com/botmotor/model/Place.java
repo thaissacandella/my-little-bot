@@ -21,9 +21,10 @@ public final class Place implements Comparable<Place> {
 	private final Status status;
 	private final BigDecimal rating;
 	private final BigDecimal distanceBetweenOrigin;
+	private String imgUrl;
 
 	public Place(se.walkercrou.places.Place place, double latitudeOrigin,
-			double longitueOrigin) {
+			double longitueOrigin, String apiKey) {
 		this.name = place.getName();
 		this.types = place.getTypes();
 		this.address = place.getAddress();
@@ -36,6 +37,17 @@ public final class Place implements Comparable<Place> {
 		this.rating = BigDecimal.valueOf(place.getRating());
 		this.distanceBetweenOrigin = distFrom(latitudeOrigin, longitueOrigin,
 				place.getLatitude(), place.getLongitude());
+
+		try {
+			String photoReference = (String) place.getJson().getJSONArray
+					("photos").getJSONObject(0).get("photo_reference");
+
+			this.imgUrl = "https://maps.googleapis" +
+					".com/maps/api/place/photo?key=" + apiKey +
+					"&photoreference=" + photoReference + "&maxheight=400";
+		} catch (Exception e) {
+			// provavelmente não tem imagem
+		}
 	}
 
 	// TODO: verificar menor distância percorrendo as ruas
@@ -99,6 +111,10 @@ public final class Place implements Comparable<Place> {
 		return distanceBetweenOrigin;
 	}
 
+	public String getImgUrl() {
+		return imgUrl;
+	}
+
 	@Override
 	public String toString() {
 		return "Place{" +
@@ -113,7 +129,15 @@ public final class Place implements Comparable<Place> {
 	}
 
 	public String toLine() {
-		return this.name;
+		return this.name + " (" + this.distanceBetweenOrigin.intValue() + " m)";
+	}
+
+	public String toDetail() {
+		String s = "Nome: " + this.name + "\n";
+		s += "Distância: " + this.distanceBetweenOrigin.intValue() + " m\n";
+		s += "Rating: " + this.rating + "\n";
+		s += "Quero chegar lá:\n/Sim, com certeza\n/Não, mostre-me mais";
+		return s;
 	}
 
 	@Override

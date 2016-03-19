@@ -53,7 +53,7 @@ public class PlaceService {
 				.getNearbyPlaces(latitude, longitude, DEFAULT_RADIUS,
 						DEFAULT_NUMBER_OF_RESULTS, params);
 		return nearbyPlaces.stream().map(p -> new Place(p, latitude,
-				longitude)).sorted().collect(Collectors.toList());
+				longitude, GOOGLE_KEY)).sorted().collect(Collectors.toList());
 	}
 
 	public List<Place> getPlaces(String address, TipoLocal tipoLocal) {
