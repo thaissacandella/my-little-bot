@@ -7,7 +7,10 @@ public class Response {
 	private String texto;
 	private double latitude;
 	private double longitude;
+	private String photo;
 	private ResponseType responseType;
+
+	private Response(){}
 
 	public Response(String text) {
 		this.texto = text;
@@ -18,6 +21,13 @@ public class Response {
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.responseType = ResponseType.LOCATION;
+	}
+
+	public static Response photo(String t) {
+		Response r = new Response();
+		r.photo = t;
+		r.responseType = ResponseType.PHOTO;
+		return r;
 	}
 
 	public String getTexto() {
@@ -36,4 +46,7 @@ public class Response {
 		return responseType;
 	}
 
+	public String getPhoto() {
+		return photo;
+	}
 }

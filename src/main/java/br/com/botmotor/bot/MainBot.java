@@ -89,6 +89,11 @@ public class MainBot {
 				Place p = sessao.getPlace(valor);
 				Response details = new Response(p.toDetail());
 				Response location = new Response(p.getLatitude().doubleValue(), p.getLongitude().doubleValue());
+				System.out.println("----------------------------------------" + p.getImgUrl());
+				if (p.getImgUrl() != null) {
+					Response photo = Response.photo(p.getImgUrl());
+					return Arrays.asList(photo, details, location);
+				}
 				return Arrays.asList(details, location);
 			}
 		} else if (m instanceof MessageLocation) {
