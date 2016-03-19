@@ -18,12 +18,11 @@ import java.util.Set;
 public class Main {
 
 	private static final Set<Long> IDS = new HashSet<>();
-	private static final boolean THA_MODE = false;
+	private static final boolean THA_MODE = true;
 	private static MainBot BOT = new MainBot();
 	private static ThaBot THA_BOT = new ThaBot();
 	// TODO: alterar antes da apresentação
 	private static int LAST_MESSAGE = 1297;
-	private static final boolean THA_MODE = true;
 
 	public static void main(String[] args) throws Exception {
 		if (THA_MODE) {
