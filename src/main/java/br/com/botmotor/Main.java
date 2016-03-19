@@ -10,6 +10,7 @@ import com.google.gson.JsonParser;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Main {
@@ -17,7 +18,7 @@ public class Main {
 	private static final Set<Long> IDS = new HashSet<>();
 	private static MainBot BOT = new MainBot();
 	// TODO: alterar antes da apresentação
-	private static int LAST_MESSAGE = 809;
+	private static int LAST_MESSAGE = 878;
 
 	public static void main(String[] args) throws Exception {
 		while (true) {
@@ -29,7 +30,6 @@ public class Main {
 						.getAsJsonObject();
 				Long id = message.get("message_id").getAsLong();
 				if (id < LAST_MESSAGE || IDS.contains(id)) {
-					System.out.println("Ignoring " + id);
 					continue;
 				}
 				IDS.add(id);
@@ -41,17 +41,20 @@ public class Main {
 					continue;
 				}
 
-				Response r = BOT.process(m);
-				if (r == null) {
+				List<Response> rs = BOT.process(m);
+				if (rs == null) {
 					continue;
 				}
+				for (Response r : rs) {
 
-				switch (r.getResponseType()) {
-					case TEXT:
-						sendResponse(m.getUserId(), r.getTexto());
-						break;
-					case LOCATION:
-						break;
+					switch (r.getResponseType()) {
+						case TEXT:
+							sendResponse(m.getUserId(), r.getTexto());
+							break;
+						case LOCATION:
+							sendLocation(m.getUserId(), r.getLatitude(), r.getLongitude());
+							break;
+					}
 				}
 			}
 
