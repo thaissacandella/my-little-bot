@@ -22,7 +22,7 @@ public class Main {
 	private static MainBot BOT = new MainBot();
 	private static ThaBot THA_BOT = new ThaBot();
 	// TODO: alterar antes da apresentação
-	private static int LAST_MESSAGE = 1341;
+	private static int LAST_MESSAGE = 1358;
 
 	public static void main(String[] args) throws Exception {
 		if (THA_MODE) {
