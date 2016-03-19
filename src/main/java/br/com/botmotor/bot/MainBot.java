@@ -1,4 +1,6 @@
-package chatbot;
+package br.com.botmotor.bot;
+
+import chatbot.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,8 +10,12 @@ public class MainBot implements Bot {
 
     private final Map<Long, UserSession> dados = new HashMap<>();
 
-    public String process(Message m) {
+    @Override
+    public Response process(Message m) {
+        return new Response(processString(m));
+    }
 
+    public String processString(Message m) {
         if (m.getMessage() == null) {
             return "";
         }

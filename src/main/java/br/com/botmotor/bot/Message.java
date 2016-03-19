@@ -1,4 +1,4 @@
-package chatbot;
+package br.com.botmotor.bot;
 
 public class Message {
 

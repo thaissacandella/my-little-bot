@@ -1,4 +1,4 @@
-package chatbot;
+package br.com.botmotor.bot;
 
 /**
  * Created by luan on 3/19/16.

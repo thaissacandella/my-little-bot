@@ -1,6 +1,10 @@
-package chatbot;
+package br.com.botmotor;
 
 import br.com.botmotor.BotmotorClient;
+import br.com.botmotor.bot.Bot;
+import br.com.botmotor.bot.MainBot;
+import br.com.botmotor.bot.Message;
+import br.com.botmotor.bot.Response;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -42,8 +46,8 @@ public class Main {
 						.getAsLong();
 
 				Message m = new Message(user, text);
-				String r = bot.process(m);
-				sendResponse(m.getUser(), r);
+				Response r = bot.process(m);
+				sendResponse(m.getUser(), r.getTexto());
 			}
 
 			Thread.sleep(1000);

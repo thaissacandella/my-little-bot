@@ -1,4 +1,6 @@
-package chatbot;
+package br.com.botmotor.bot;
+
+import chatbot.Etapa;
 
 /**
  * Created by luan on 3/19/16.

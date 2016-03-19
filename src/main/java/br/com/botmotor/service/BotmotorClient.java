@@ -1,4 +1,4 @@
-package br.com.botmotor;
+package br.com.botmotor.service;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
