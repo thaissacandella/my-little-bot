@@ -1,3 +1,5 @@
+package chatbot;
+
 import java.util.List;
 
 public interface Bot {
