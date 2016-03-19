@@ -19,10 +19,9 @@ public class Main {
 
 	private static final Set<Long> ids = new HashSet<>();
 	private static Bot bot = new MainBot();
-	private static int LAST_MESSAGE = 130;
+	private static int LAST_MESSAGE = 330;
 
-	public static void main(
-			String[] args) throws IOException, InterruptedException {
+	public static void main(String[] args) throws IOException, InterruptedException {
 		while (true) {
 			String result = getUpdates();
 			JsonObject obj = parse(result);
@@ -41,6 +40,9 @@ public class Main {
 						.getAsLong();
 
 				Message m = new Message(user, text);
+				if (m == null) {
+					continue;
+				}
 				Response r = bot.process(m);
 				sendResponse(m.getUser(), r.getTexto());
 			}
