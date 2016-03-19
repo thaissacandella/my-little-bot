@@ -15,68 +15,73 @@ public class MainBot implements Bot {
 	}
 
 	public String processString(Message m) {
-		if (m.getMessage() == null) {
-			return "";
-		}
-		if (!m.getMessage().startsWith("/")) {
-			return null;
-		}
-		if (m.getMessage().endsWith(BOT_NAME)) {
-			m.setMessage(m.getMessage().substring(0, m.getMessage().length() - BOT_NAME.length()));
-		}
-		System.out.println(m.getMessage());
-
-		if ("/start".equals(m.getMessage())) {
-
-			String retorno;
-
-			if (dados.containsKey(m.getUser())) {
-				retorno = "E agora, o que você procura?";
-			} else {
-				retorno = "E ai, o que você está procurando?";
+		if (m instanceof MessageText) {
+			MessageText messageText = (MessageText) m;
+			if (messageText.getText() == null) {
+				return "";
 			}
-			dados.put(m.getUser(), new UserSession());
+			if (!messageText.getText().startsWith("/")) {
+				return null;
+			}
+			if (messageText.getText().endsWith(BOT_NAME)) {
+				messageText.setText(messageText.getText().substring(0,
+						messageText.getText().length() - BOT_NAME.length()));
+			}
+			System.out.println(messageText.getText());
 
-			return retorno + "\n" +
-					"Digite /1 para buscarmos restaurantes \n" +
-					"Digite /2 para buscarmos Cafés \n" +
-					"Digite /3 para buscarmos bares";
-		}
+			if ("/start".equals(messageText.getText())) {
 
-		if (!dados.containsKey(m.getUser())) {
-			return "Digite /start para comerçarmos";
-		}
+				String retorno;
 
-		UserSession sessao = dados.get(m.getUser());
+				if (dados.containsKey(messageText.getUserId())) {
+					retorno = "E agora, o que você procura?";
+				} else {
+					retorno = "E ai, o que você está procurando?";
+				}
+				dados.put(messageText.getUserId(), new UserSession());
 
-		if (sessao.getEtapa() == Etapa.ESCOLHA_TIPO_LOCAL) {
-			if (!Pattern.matches("/\\d", m.getMessage())) {
-				return "\n" +
-						"Opção inválida. \n" +
+				return retorno + "\n" +
 						"Digite /1 para buscarmos restaurantes \n" +
 						"Digite /2 para buscarmos Cafés \n" +
 						"Digite /3 para buscarmos bares";
 			}
 
-			int valor = Integer.parseInt(m.getMessage().substring(1));
-
-			if (valor > TipoLocal.values().length) {
-				return "\n" +
-						"Opção inválida. \n" +
-						"Digite /1 para buscarmos restaurantes \n" +
-						"Digite /2 para buscarmos cafés \n" +
-						"Digite /3 para buscarmos bares";
+			if (!dados.containsKey(messageText.getUserId())) {
+				return "Digite /start para comerçarmos";
 			}
 
-			TipoLocal tipoLocal = TipoLocal.values()[valor - 1];
+			UserSession sessao = dados.get(messageText.getUserId());
 
-			sessao.setTipoLocalEscolhido(tipoLocal);
+			if (sessao.getEtapa() == Etapa.ESCOLHA_TIPO_LOCAL) {
+				if (!Pattern.matches("/\\d", messageText.getText())) {
+					return "\n" +
+							"Opção inválida. \n" +
+							"Digite /1 para buscarmos restaurantes \n" +
+							"Digite /2 para buscarmos Cafés \n" +
+							"Digite /3 para buscarmos bares";
+				}
 
-			sessao.setEtapa(Etapa.ENVIE_LOCALIZ);
+				int valor = Integer.parseInt(messageText.getText().substring
+						(1));
 
-			return "Envie a sua localização";
+				if (valor > TipoLocal.values().length) {
+					return "\n" +
+							"Opção inválida. \n" +
+							"Digite /1 para buscarmos restaurantes \n" +
+							"Digite /2 para buscarmos cafés \n" +
+							"Digite /3 para buscarmos bares";
+				}
+
+				TipoLocal tipoLocal = TipoLocal.values()[valor - 1];
+
+				sessao.setTipoLocalEscolhido(tipoLocal);
+
+				sessao.setEtapa(Etapa.ENVIE_LOCALIZ);
+
+				return "Envie a sua localização";
+			}
+
 		}
-
 		return "else";
 	}
 }

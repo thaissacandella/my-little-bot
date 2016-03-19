@@ -2,7 +2,7 @@ package br.com.botmotor.bot;
 
 public final class MessageText extends Message {
 
-	private final String text;
+	private String text;
 
 	public MessageText(String text, long userId) {
 		super(userId);
@@ -11,6 +11,10 @@ public final class MessageText extends Message {
 
 	public String getText() {
 		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
 	}
 
 	@Override
