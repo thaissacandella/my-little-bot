@@ -8,14 +8,25 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
+import sun.java2d.pipe.SpanShapeRenderer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.List;
 
 public class Main {
 
+    public static class SimpleBot implements Bot {
+
+        public List<String> process(Message m) {
+            return Arrays.asList(m.getUser() + ": " + m.getMessage());
+        }
+    }
+
     public static void main(String[] args) throws IOException {
+        Bot bot = new SimpleBot();
         String result = getUpdates();
         JsonObject obj = (JsonObject) new JsonParser().parse(result);
         for (JsonElement e : obj.get("result").getAsJsonArray()) {
@@ -23,7 +34,8 @@ public class Main {
             String text = message.get("text") == null ? null : message.get("text").getAsString();
             Long user = message.get("from").getAsJsonObject().get("id").getAsLong();
 
-            System.out.println(user + ": " + text);
+            Message m = new Message(user, text);
+            System.out.println(bot.process(m));
         }
 
     }
