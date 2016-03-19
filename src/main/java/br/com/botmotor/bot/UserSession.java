@@ -31,4 +31,12 @@ public class UserSession {
 	public void setEtapa(Etapa etapa) {
 		this.etapa = etapa;
 	}
+
+	public double getLatitude() {
+		return latitude;
+	}
+
+	public double getLongitude() {
+		return longitude;
+	}
 }

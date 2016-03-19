@@ -18,7 +18,7 @@ public class Main {
 	private static final Set<Long> IDS = new HashSet<>();
 	private static MainBot BOT = new MainBot();
 	// TODO: alterar antes da apresentação
-	private static int LAST_MESSAGE = 514;
+	private static int LAST_MESSAGE = 648;
 
 	public static void main(String[] args) throws Exception {
 		while (true) {
@@ -96,7 +96,7 @@ public class Main {
 
 		BotmotorClient client = new BotmotorClient().withEndpoint
 				("/sendmessage").withGetParameters("?chat_id=" + chatId +
-				"&text=" + URLEncoder.encode(text, "UTF-8"));
+				"&text=" + (text == null ? "null" : URLEncoder.encode(text, "UTF-8")));
 
 		String response = client.getSingleResult(String.class);
 		System.out.println(response);

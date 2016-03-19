@@ -1,8 +1,14 @@
 package br.com.botmotor.bot;
 
+import br.com.botmotor.model.Place;
+import br.com.botmotor.service.PlaceService;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class MainBot {
 
@@ -81,6 +87,9 @@ public class MainBot {
 				return "Envie a sua localização";
 			}
 
+			if (sessao.getEtapa() == Etapa.ESCOLHA_LOCAL) {
+				return "Você escolheu o local " + messageText.getText();
+			}
 		} else if (m instanceof MessageLocation) {
 			UserSession sessao = dados.get(m.getUserId());
 			if (sessao == null) {
@@ -89,8 +98,9 @@ public class MainBot {
 			if (sessao.getEtapa() == Etapa.ENVIE_LOCALIZ) {
 				sessao.setLocation((MessageLocation) m);
 				sessao.setEtapa(Etapa.ESCOLHA_LOCAL);
-				System.out.println("-----------------------------------------------");
-				return "Lista de lugares por lugar.";
+				List<Place> places = new PlaceService().getPlaces(sessao.getLatitude(), sessao.getLongitude(), sessao.getTipoLocalEscolhido());
+				AtomicInteger a = new AtomicInteger(0);
+				return places.stream().map(l -> "/" + a.incrementAndGet() + " " + l.toLine()).collect(Collectors.joining("\n"));
 			}
 		}
 
