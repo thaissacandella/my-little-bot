@@ -17,4 +17,9 @@ public class Message {
     public Long getUser() {
         return user;
     }
+
+    @Override
+    public String toString() {
+        return this.user + ": " + this.message;
+    }
 }

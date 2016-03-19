@@ -13,6 +13,7 @@ import sun.java2d.pipe.SpanShapeRenderer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -35,21 +36,33 @@ public class Main {
             String result = getUpdates();
             JsonObject obj = (JsonObject) new JsonParser().parse(result);
             for (JsonElement e : obj.get("result").getAsJsonArray()) {
-                Long id = e.getAsJsonObject().get("update_id").getAsLong();
-                if (ids.contains(id)) {
+                JsonObject message = e.getAsJsonObject().get("message").getAsJsonObject();
+                if (ids.contains(message.get("message_id").getAsLong())) {
                     continue;
                 }
-                JsonObject message = e.getAsJsonObject().get("message").getAsJsonObject();
+                ids.add(message.get("message_id").getAsLong());
                 String text = message.get("text") == null ? null : message.get("text").getAsString();
-                Long user = message.get("from").getAsJsonObject().get("id").getAsLong();
+                Long user = message.get("chat").getAsJsonObject().get("id").getAsLong();
 
                 Message m = new Message(user, text);
-                System.out.println(bot.process(m));
+                List<String> r = bot.process(m);
+                sendResponse(m.getUser(), r.get(0).toString());
             }
 
             Thread.sleep(1000);
         }
 
+    }
+
+    private static void sendResponse(Long chatId, String text) throws IOException {
+        String url = "https://api.telegram.org/bot198737376:AAFrs1DR7fBwsYvKj_jDW6lZvwlOULFE9Y0/sendmessage?chat_id=" + chatId + "&text=" + URLEncoder.encode(text, "UTF-8");
+
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpGet request = new HttpGet(url);
+
+        // add request header
+        HttpResponse response = client.execute(request);
+        System.out.println(response);
     }
 
     private static String getUpdates() throws IOException {
