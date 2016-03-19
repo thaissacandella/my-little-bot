@@ -20,7 +20,7 @@ public abstract class Message {
 		this.userId = user;
 	}
 
-	public long getUser() {
+	public long getUserId() {
 		return userId;
 	}
 

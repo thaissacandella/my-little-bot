@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 
 public class MainBot implements Bot {
 
+	public static final String BOT_NAME = "@botmoter_bot";
 	private final Map<Long, UserSession> dados = new HashMap<>();
 
 	@Override
@@ -17,6 +18,13 @@ public class MainBot implements Bot {
 		if (m.getMessage() == null) {
 			return "";
 		}
+		if (!m.getMessage().startsWith("/")) {
+			return null;
+		}
+		if (m.getMessage().endsWith(BOT_NAME)) {
+			m.setMessage(m.getMessage().substring(0, m.getMessage().length() - BOT_NAME.length()));
+		}
+		System.out.println(m.getMessage());
 
 		if ("/start".equals(m.getMessage())) {
 
