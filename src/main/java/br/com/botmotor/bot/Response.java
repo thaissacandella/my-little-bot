@@ -5,29 +5,30 @@ package br.com.botmotor.bot;
  */
 public class Response {
 	private String texto;
-	private double[] location;
+	private double latitude;
+	private double longitude;
+	private ResponseType responseType;
 
 	public Response(String text) {
 		this.texto = text;
+		this.responseType = ResponseType.TEXT;
 	}
 
-	public Response(double... location) {
-		this.location = location;
-	}
-
-	public boolean isLocation() {
-		return this.location != null;
+	public Response(double latitude, double longitude) {
+		this.latitude = latitude;
+		this.longitude = longitude;
+		this.responseType = ResponseType.LOCATION;
 	}
 
 	public String getTexto() {
 		return this.texto;
 	}
 
-	public double getLat() {
-		return this.location[0];
+	public double getLatitude() {
+		return latitude;
 	}
 
-	public double getLong() {
-		return this.location[1];
+	public double getLongitude() {
+		return longitude;
 	}
 }

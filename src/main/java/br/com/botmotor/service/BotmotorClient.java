@@ -53,8 +53,11 @@ public final class BotmotorClient {
 	}
 
 	private ClientResponse makeRequest() {
-		WebResource webResource = buildClient().resource(BASE_URL + BOT_TOKEN +
-				endpoint + getParameters);
+		String url = BASE_URL + BOT_TOKEN + endpoint;
+		if (getParameters != null) {
+			url += getParameters;
+		}
+		WebResource webResource = buildClient().resource(url);
 		return webResource.method(HTTP_METHOD, ClientResponse.class);
 	}
 
