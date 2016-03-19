@@ -79,7 +79,11 @@ public class MainBot {
 			}
 
 			if (sessao.getEtapa() == Etapa.ESCOLHA_LOCAL) {
-				int valor = Integer.parseInt(messageText.getText().substring(1));
+				if (!Pattern.matches("/opcao\\d", messageText.getText())) {
+					return null;
+				}
+				
+				int valor = Integer.parseInt(messageText.getText().substring(6));
 				sessao.setEtapa(Etapa.SIM_OU_NAO);
 				sessao.setPlaceEscolhido(valor);
 				return new Response(sessao.getPlace(valor).toDetail());
@@ -104,7 +108,7 @@ public class MainBot {
 				List<Place> places = new PlaceService().getPlaces(sessao.getLatitude(), sessao.getLongitude(), sessao.getTipoLocalEscolhido());
 				sessao.setPlaces(places);
 				AtomicInteger a = new AtomicInteger(0);
-				return new Response("Esses são os locais próximos e suas distâncias:\n" + places.stream().map(l -> "/" + a.incrementAndGet() + " " + l.toLine()).collect(Collectors.joining("\n")));
+				return new Response("Esses são os locais próximos e suas distâncias:\n" + places.stream().map(l -> "/opcao" + a.incrementAndGet() + " " + l.toLine()).collect(Collectors.joining("\n")));
 			}
 		}
 

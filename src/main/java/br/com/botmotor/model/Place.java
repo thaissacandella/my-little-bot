@@ -136,7 +136,7 @@ public final class Place implements Comparable<Place> {
 		String s = "Nome: " + this.name + "\n";
 		s += "Distância: " + this.distanceBetweenOrigin.intValue() + " m\n";
 		s += "Rating: " + this.rating + "\n";
-		s += "Quero chegar lá:\n/Sim, com certeza\n/Não, mostre-me mais";
+		s += "Quero chegar lá:\n/Sim, com certeza\n/Nao, mostre-me mais";
 		return s;
 	}
 
