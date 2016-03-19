@@ -2,6 +2,7 @@ package br.com.botmotor;
 
 import br.com.botmotor.bot.*;
 import br.com.botmotor.service.BotmotorClient;
+import br.com.botmotor.service.UrlShortnerService;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -17,15 +18,17 @@ import java.util.Set;
 public class Main {
 
 	private static final Set<Long> IDS = new HashSet<>();
+	private static final boolean THA_MODE = false;
 	private static MainBot BOT = new MainBot();
 	private static ThaBot THA_BOT = new ThaBot();
 	// TODO: alterar antes da apresentação
 	private static int LAST_MESSAGE = 1014;
-	private static final boolean THA_MODE = false;
 
 	public static void main(String[] args) throws Exception {
 		if (THA_MODE) {
-			sendResponse(147976380, "HUM!! A noite tá tranquila, tá favorável para dar uma volta, não!? Posso sugerir lugares perto de você?");
+			sendResponse(147976380, "HUM!! A noite tá tranquila, tá favorável " +
+					"para dar uma volta, não!? Posso sugerir lugares perto de " +
+					"você?");
 		}
 		while (true) {
 			String updates = getUpdates();
@@ -62,10 +65,12 @@ public class Main {
 							sendResponse(m.getUserId(), r.getTexto());
 							break;
 						case LOCATION:
-							sendLocation(m.getUserId(), r.getLatitude(), r.getLongitude());
+							sendLocation(m.getUserId(), r.getLatitude(), r
+									.getLongitude());
 							break;
 						case PHOTO:
-							sendResponse(m.getUserId(), r.getPhoto());
+							sendResponse(m.getUserId(), new UrlShortnerService
+									().shortUrl(r.getPhoto()));
 							break;
 					}
 				}
@@ -100,7 +105,8 @@ public class Main {
 		return (JsonObject) new JsonParser().parse(result);
 	}
 
-	private static void sendPhoto(long chatId, String photoUrl) throws UnsupportedEncodingException {
+	private static void sendPhoto(long chatId,
+			String photoUrl) throws UnsupportedEncodingException {
 		BotmotorClient client = new BotmotorClient().withEndpoint
 				("/sendPhoto").withGetParameters("?chat_id=" + chatId +
 				"&photo=" + URLEncoder.encode(photoUrl, "UTF-8"));
