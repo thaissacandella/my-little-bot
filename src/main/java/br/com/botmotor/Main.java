@@ -15,9 +15,9 @@ import java.util.Set;
 public class Main {
 
 	private static final Set<Long> IDS = new HashSet<>();
-	private static Bot BOT = new MainBot();
+	private static MainBot BOT = new MainBot();
 	// TODO: alterar antes da apresentação
-	private static int LAST_MESSAGE = 400;
+	private static int LAST_MESSAGE = 446;
 
 	public static void main(String[] args) throws Exception {
 		while (true) {

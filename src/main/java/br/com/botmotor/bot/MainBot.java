@@ -4,12 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class MainBot implements Bot {
+public class MainBot {
 
 	public static final String BOT_NAME = "@botmoter_bot";
 	private final Map<Long, UserSession> dados = new HashMap<>();
 
-	@Override
 	public Response process(Message m) {
 		return new Response(processString(m));
 	}
