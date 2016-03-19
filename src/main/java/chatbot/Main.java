@@ -23,7 +23,6 @@ public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         while (true) {
-
             String result = getUpdates();
             JsonObject obj = (JsonObject) new JsonParser().parse(result);
             for (JsonElement e : obj.get("result").getAsJsonArray()) {
@@ -37,8 +36,8 @@ public class Main {
                 Long user = message.get("chat").getAsJsonObject().get("id").getAsLong();
 
                 Message m = new Message(user, text);
-                String r = bot.process(m);
-                sendResponse(m.getUser(), r);
+                Response r = bot.process(m);
+                sendResponse(m.getUser(), r.getTexto());
             }
 
             Thread.sleep(1000);

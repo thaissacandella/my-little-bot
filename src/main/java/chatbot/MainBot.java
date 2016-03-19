@@ -8,8 +8,12 @@ public class MainBot implements Bot {
 
     private Map<Long, UserSession> dados = new HashMap<Long, UserSession>();
 
-    public String process(Message m) {
+    @Override
+    public Response process(Message m) {
+        return new Response(processString(m));
+    }
 
+    public String processString(Message m) {
         if (m.getMessage() == null) {
             return "";
         }
