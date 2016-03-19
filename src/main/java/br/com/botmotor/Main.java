@@ -19,7 +19,7 @@ public class Main {
 	private static final Set<Long> IDS = new HashSet<>();
 	private static MainBot BOT = new MainBot();
 	// TODO: alterar antes da apresentação
-	private static int LAST_MESSAGE = 987;
+	private static int LAST_MESSAGE = 1014;
 
 	public static void main(String[] args) throws Exception {
 		while (true) {
@@ -55,7 +55,7 @@ public class Main {
 							sendLocation(m.getUserId(), r.getLatitude(), r.getLongitude());
 							break;
 						case PHOTO:
-							sendPhoto(m.getUserId(), r.getPhoto());
+							sendResponse(m.getUserId(), r.getPhoto());
 							break;
 					}
 				}
