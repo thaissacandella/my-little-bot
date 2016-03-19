@@ -14,9 +14,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Main {
+
+    private static final Set<Long> ids = new HashSet<Long>();
+    private static Bot bot = new SimpleBot();
 
     public static class SimpleBot implements Bot {
 
@@ -25,17 +30,24 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        Bot bot = new SimpleBot();
-        String result = getUpdates();
-        JsonObject obj = (JsonObject) new JsonParser().parse(result);
-        for (JsonElement e : obj.get("result").getAsJsonArray()) {
-            JsonObject message = e.getAsJsonObject().get("message").getAsJsonObject();
-            String text = message.get("text") == null ? null : message.get("text").getAsString();
-            Long user = message.get("from").getAsJsonObject().get("id").getAsLong();
+    public static void main(String[] args) throws IOException, InterruptedException {
+        while (true) {
+            String result = getUpdates();
+            JsonObject obj = (JsonObject) new JsonParser().parse(result);
+            for (JsonElement e : obj.get("result").getAsJsonArray()) {
+                Long id = e.getAsJsonObject().get("update_id").getAsLong();
+                if (ids.contains(id)) {
+                    continue;
+                }
+                JsonObject message = e.getAsJsonObject().get("message").getAsJsonObject();
+                String text = message.get("text") == null ? null : message.get("text").getAsString();
+                Long user = message.get("from").getAsJsonObject().get("id").getAsLong();
 
-            Message m = new Message(user, text);
-            System.out.println(bot.process(m));
+                Message m = new Message(user, text);
+                System.out.println(bot.process(m));
+            }
+
+            Thread.sleep(1000);
         }
 
     }
