@@ -46,9 +46,9 @@ public class MainBot {
 				dados.put(messageText.getUserId(), new UserSession());
 
 				return retorno + "\n" +
-						"Digite /1 para buscarmos restaurantes \n" +
-						"Digite /2 para buscarmos Cafés \n" +
-						"Digite /3 para buscarmos bares";
+						"Digite /restaurantes para buscarmos Restaurantes \n" +
+						"Digite /cafes para buscarmos Cafés \n" +
+						"Digite /bares para buscarmos Bares";
 			}
 
 			if (!dados.containsKey(messageText.getUserId())) {
@@ -59,26 +59,21 @@ public class MainBot {
 
 			System.out.println("------------------------" + sessao.getEtapa());
 			if (sessao.getEtapa() == Etapa.ESCOLHA_TIPO_LOCAL) {
-				if (!Pattern.matches("/\\d", messageText.getText())) {
-					return "\n" +
-							"Opção inválida. \n" +
-							"Digite /1 para buscarmos restaurantes \n" +
-							"Digite /2 para buscarmos Cafés \n" +
-							"Digite /3 para buscarmos bares";
+				if (!Pattern.matches("/.*", messageText.getText())) {
+					return null;
 				}
 
-				int valor = Integer.parseInt(messageText.getText().substring
-						(1));
-
-				if (valor > TipoLocal.values().length) {
-					return "\n" +
-							"Opção inválida. \n" +
-							"Digite /1 para buscarmos restaurantes \n" +
-							"Digite /2 para buscarmos cafés \n" +
-							"Digite /3 para buscarmos bares";
+				String valor = messageText.getText().substring(1);
+				
+				TipoLocal tipoLocal = null;
+				try {
+					tipoLocal = TipoLocal.valueOf(valor.toUpperCase());
+				} catch (IllegalArgumentException e) {
 				}
 
-				TipoLocal tipoLocal = TipoLocal.values()[valor - 1];
+				if (tipoLocal == null) {
+					return null;
+				}
 
 				sessao.setTipoLocalEscolhido(tipoLocal);
 
