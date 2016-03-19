@@ -128,6 +128,10 @@ public final class Place implements Comparable<Place> {
 				'}';
 	}
 
+	public String toLine() {
+		return this.name;
+	}
+
 	@Override
 	public int compareTo(Place o) {
 		return Comparator.comparing(Place::getDistanceBetweenOrigin)

@@ -1,8 +1,14 @@
 package br.com.botmotor.bot;
 
+import br.com.botmotor.model.Place;
+import br.com.botmotor.service.PlaceService;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class MainBot {
 
@@ -51,6 +57,7 @@ public class MainBot {
 
 			UserSession sessao = dados.get(messageText.getUserId());
 
+			System.out.println("------------------------" + sessao.getEtapa());
 			if (sessao.getEtapa() == Etapa.ESCOLHA_TIPO_LOCAL) {
 				if (!Pattern.matches("/\\d", messageText.getText())) {
 					return "\n" +
@@ -80,19 +87,23 @@ public class MainBot {
 				return "Envie a sua localização";
 			}
 
-			System.out.println(sessao.getEtapa());
+			if (sessao.getEtapa() == Etapa.ESCOLHA_LOCAL) {
+				return "Você escolheu o local " + messageText.getText();
+			}
+		} else if (m instanceof MessageLocation) {
+			UserSession sessao = dados.get(m.getUserId());
+			if (sessao == null) {
+				return null;
+			}
 			if (sessao.getEtapa() == Etapa.ENVIE_LOCALIZ) {
-				if (m instanceof MessageLocation) {
-					sessao.setLocation((MessageLocation) m);
-					sessao.setEtapa(Etapa.ESCOLHA_LOCAL);
-					System.out.println("-----------------------------------------------");
-					return "Lista de lugares por lugar.";
-				} else {
-					return "Você deve enviar uma localização, moço.";
-				}
+				sessao.setLocation((MessageLocation) m);
+				sessao.setEtapa(Etapa.ESCOLHA_LOCAL);
+				List<Place> places = new PlaceService().getPlaces(sessao.getLatitude(), sessao.getLongitude(), sessao.getTipoLocalEscolhido());
+				AtomicInteger a = new AtomicInteger(0);
+				return places.stream().map(l -> "/" + a.incrementAndGet() + " " + l.toLine()).collect(Collectors.joining("\n"));
 			}
 		}
 
-		return "else";
+		return null;
 	}
 }
