@@ -31,4 +31,9 @@ public class Response {
 	public double getLongitude() {
 		return longitude;
 	}
+
+	public ResponseType getResponseType() {
+		return responseType;
+	}
+
 }

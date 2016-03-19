@@ -1,6 +1,7 @@
 package br.com.botmotor;
 
 import br.com.botmotor.bot.*;
+import br.com.botmotor.model.Place;
 import br.com.botmotor.service.BotmotorClient;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -41,8 +42,13 @@ public class Main {
 				}
 
 				Response r = BOT.process(m);
-				if (r.getTexto() != null) {
-					sendResponse(m.getUserId(), r.getTexto());
+
+				switch (r.getResponseType()) {
+					case TEXT:
+						sendResponse(m.getUserId(), r.getTexto());
+						break;
+					case LOCATION:
+						break;
 				}
 			}
 
