@@ -1,11 +1,10 @@
 package br.com.botmotor.service;
 
+import br.com.botmotor.bot.TipoLocal;
 import br.com.botmotor.model.Place;
 import se.walkercrou.places.GooglePlaces;
 import se.walkercrou.places.Param;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,31 +18,24 @@ public class PlaceService {
 			"AIzaSyBU9anoKp46N76GcBh9tzN_y5u0eYABuFo";
 	private static final double DEFAULT_RADIUS = 5000D;
 	private static final int DEFAULT_NUMBER_OF_RESULTS = 10;
-	private static final String TYPES;
-
-	static {
-		try {
-			TYPES = URLEncoder.encode("bar|cafe|restaurant", "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			throw new IllegalStateException(e);
-		}
-	}
 
 	public static void main(String[] args) {
 		final PlaceService placeService = new PlaceService();
 
-		// teste1: by lat long
+		// teste1: bares by lat long
 		final double latitude = -22.893990D;
 		final double longitude = -47.047745D;
 
-		System.out.println("================= teste1: by lat long");
-		placeService.printInSysOut(placeService.getPlaces(latitude,
-				longitude));
+		System.out.println("================= teste1: bares by lat long");
+		placeService.printInSysOut(placeService.getPlaces(latitude, longitude,
+				TipoLocal.BARES));
 
-		// teste2: by address
+		// teste2: restaurants by address
 		String address = "Rua Adelino Martins, 500, Campinas - SP";
-		System.out.println("\n\n================= teste2: by address");
-		placeService.printInSysOut(placeService.getPlaces(address));
+		System.out.println("\n\n================= teste2: restaurants by " +
+				"address");
+		placeService.printInSysOut(placeService.getPlaces(address, TipoLocal
+				.RESTAURANTES));
 	}
 
 	private void printInSysOut(List<Place> places) {
@@ -51,10 +43,12 @@ public class PlaceService {
 				(Collectors.joining("\n\n")));
 	}
 
-	public List<Place> getPlaces(double latitude, double longitude) {
+	public List<Place> getPlaces(double latitude, double longitude,
+			TipoLocal tipoLocal) {
 		GooglePlaces client = new GooglePlaces(GOOGLE_KEY);
+
 		final Param[] params = {new Param("rankBy").value("distance"), new
-				Param("types").value(TYPES)};
+				Param("types").value(tipoLocal.getApiType())};
 		final List<se.walkercrou.places.Place> nearbyPlaces = client
 				.getNearbyPlaces(latitude, longitude, DEFAULT_RADIUS,
 						DEFAULT_NUMBER_OF_RESULTS, params);
@@ -62,7 +56,7 @@ public class PlaceService {
 				longitude)).sorted().collect(Collectors.toList());
 	}
 
-	public List<Place> getPlaces(String address) {
+	public List<Place> getPlaces(String address, TipoLocal tipoLocal) {
 		GooglePlaces client = new GooglePlaces(GOOGLE_KEY);
 		final List<se.walkercrou.places.Place> placesByQuery = client
 				.getPlacesByQuery(address, DEFAULT_NUMBER_OF_RESULTS);
@@ -71,7 +65,7 @@ public class PlaceService {
 		}
 		// by the default, the address is a single place
 		se.walkercrou.places.Place place = placesByQuery.get(0);
-		return getPlaces(place.getLatitude(), place.getLongitude());
+		return getPlaces(place.getLatitude(), place.getLongitude(), tipoLocal);
 	}
 
 }
