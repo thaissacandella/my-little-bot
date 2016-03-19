@@ -81,7 +81,19 @@ public class MainBot implements Bot {
 				return "Envie a sua localização";
 			}
 
+			System.out.println(sessao.getEtapa());
+			if (sessao.getEtapa() == Etapa.ENVIE_LOCALIZ) {
+				if (m instanceof MessageLocation) {
+					sessao.setLocation((MessageLocation) m);
+					sessao.setEtapa(Etapa.ESCOLHA_LOCAL);
+					System.out.println("-----------------------------------------------");
+					return "Lista de lugares por lugar.";
+				} else {
+					return "Você deve enviar uma localização, moço.";
+				}
+			}
 		}
+
 		return "else";
 	}
 }

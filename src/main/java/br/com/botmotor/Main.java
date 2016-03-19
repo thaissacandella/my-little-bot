@@ -17,7 +17,7 @@ public class Main {
 	private static final Set<Long> IDS = new HashSet<>();
 	private static Bot BOT = new MainBot();
 	// TODO: alterar antes da apresentação
-	private static int LAST_MESSAGE = 323;
+	private static int LAST_MESSAGE = 400;
 
 	public static void main(String[] args) throws Exception {
 		while (true) {
@@ -41,7 +41,9 @@ public class Main {
 				}
 
 				Response r = BOT.process(m);
-				sendResponse(m.getUserId(), r.getTexto());
+				if (r.getTexto() != null) {
+					sendResponse(m.getUserId(), r.getTexto());
+				}
 			}
 
 			Thread.sleep(1000);
@@ -84,6 +86,7 @@ public class Main {
 
 	private static void sendResponse(Long chatId,
 			String text) throws IOException {
+		System.out.println(chatId + ": " + text);
 
 		BotmotorClient client = new BotmotorClient().withEndpoint
 				("/sendmessage").withGetParameters("?chat_id=" + chatId +
