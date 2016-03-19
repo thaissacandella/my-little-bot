@@ -104,10 +104,6 @@ public final class Place implements Comparable<Place> {
 		return "Place{" +
 				"name='" + name + '\'' +
 				", types=" + types +
-				", address='" + address + '\'' +
-				", googleUrl='" + googleUrl + '\'' +
-				", phoneNumber='" + phoneNumber + '\'' +
-				", website='" + website + '\'' +
 				", latitude=" + latitude +
 				", longitude=" + longitude +
 				", status=" + status +

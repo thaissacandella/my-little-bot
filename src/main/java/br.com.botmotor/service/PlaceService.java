@@ -23,7 +23,7 @@ public class PlaceService {
 
 	static {
 		try {
-			TYPES = URLEncoder.encode("food|bar|cafe|restaurant", "UTF-8");
+			TYPES = URLEncoder.encode("bar|cafe|restaurant", "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			throw new IllegalStateException(e);
 		}
