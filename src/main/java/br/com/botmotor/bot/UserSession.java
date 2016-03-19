@@ -1,5 +1,9 @@
 package br.com.botmotor.bot;
 
+import br.com.botmotor.model.Place;
+
+import java.util.List;
+
 /**
  * Created by luan on 3/19/16.
  */
@@ -10,6 +14,9 @@ public class UserSession {
 
 	private double latitude;
 	private double longitude;
+
+	private List<Place> places;
+	private int placeEscolhido;
 
 	public TipoLocal getTipoLocalEscolhido() {
 		return tipoLocalEscolhido;
@@ -38,5 +45,21 @@ public class UserSession {
 
 	public double getLongitude() {
 		return longitude;
+	}
+
+	public void setPlaces(List<Place> places) {
+		this.places = places;
+	}
+
+	public Place getPlace(int i) {
+		return places.get(i);
+	}
+
+	public void setPlaceEscolhido(int placeEscolhido) {
+		this.placeEscolhido = placeEscolhido;
+	}
+
+	public int getPlaceEscolhido() {
+		return placeEscolhido;
 	}
 }

@@ -18,7 +18,7 @@ public class Main {
 	private static final Set<Long> IDS = new HashSet<>();
 	private static MainBot BOT = new MainBot();
 	// TODO: alterar antes da apresentação
-	private static int LAST_MESSAGE = 648;
+	private static int LAST_MESSAGE = 809;
 
 	public static void main(String[] args) throws Exception {
 		while (true) {
@@ -30,6 +30,7 @@ public class Main {
 						.getAsJsonObject();
 				Long id = message.get("message_id").getAsLong();
 				if (id < LAST_MESSAGE || IDS.contains(id)) {
+					System.out.println("Ignoring " + id);
 					continue;
 				}
 				IDS.add(id);
@@ -42,6 +43,9 @@ public class Main {
 				}
 
 				Response r = BOT.process(m);
+				if (r == null) {
+					continue;
+				}
 
 				switch (r.getResponseType()) {
 					case TEXT:
