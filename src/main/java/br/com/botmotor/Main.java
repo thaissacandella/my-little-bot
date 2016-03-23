@@ -41,6 +41,7 @@ public class Main {
 				if (id < LAST_MESSAGE || IDS.contains(id)) {
 					continue;
 				}
+
 				IDS.add(id);
 
 				Message m = extractMessage(message);
@@ -81,23 +82,18 @@ public class Main {
 	}
 
 	private static Message extractMessage(JsonObject message) {
-		Message m = null;
-		long userId = message.get("chat").getAsJsonObject().get("id")
-				.getAsLong();
-		String text = message.get("text") == null ? null : message.get("text")
-				.getAsString();
-		if (text != null) {
-			m = new MessageText(text, userId);
+		long userId = message.get("chat").getAsJsonObject().get("id").getAsLong();
+		if (message.get("text") != null) {
+			return new MessageText(message.get("text").getAsString(), userId);
 		} else {
 			final JsonObject location = message.getAsJsonObject("location");
 			if (location != null) {
 				final double latitude = location.get("latitude").getAsDouble();
-				final double longitude = location.get("longitude")
-						.getAsDouble();
-				m = new MessageLocation(latitude, longitude, userId);
+				final double longitude = location.get("longitude").getAsDouble();
+				return new MessageLocation(latitude, longitude, userId);
 			}
 		}
-		return m;
+		return null;
 	}
 
 	private static JsonObject parse(String result) {
@@ -124,8 +120,7 @@ public class Main {
 		System.out.println(response);
 	}
 
-	private static void sendResponse(long chatId,
-			String text) throws IOException {
+	private static void sendResponse(long chatId, String text) throws IOException {
 		System.out.println(chatId + ": " + text);
 
 		BotmotorClient client = new BotmotorClient().withEndpoint
