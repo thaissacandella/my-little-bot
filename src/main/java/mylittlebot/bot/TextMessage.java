@@ -1,10 +1,10 @@
 package mylittlebot.bot;
 
-public final class MessageText extends Message {
+public final class TextMessage extends Message {
 
 	private String text;
 
-	public MessageText(String text, long userId) {
+	public TextMessage(String text, long userId) {
 		super(userId);
 		this.text = text;
 	}
@@ -19,6 +19,6 @@ public final class MessageText extends Message {
 
 	@Override
 	public String toString() {
-		return "MessageText{text='"+ text +'\''+'}';
+		return "TextMessage{text='"+ text +'\''+'}';
 	}
 }

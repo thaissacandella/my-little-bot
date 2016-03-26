@@ -1,6 +1,6 @@
 package mylittlebot.service;
 
-import mylittlebot.bot.TipoLocal;
+import mylittlebot.bot.LocationType;
 import mylittlebot.model.Place;
 import se.walkercrou.places.GooglePlaces;
 import se.walkercrou.places.Param;
@@ -22,11 +22,11 @@ public class PlaceService {
 	}
 
 	public List<Place> getPlaces(double latitude, double longitude,
-			TipoLocal tipoLocal) {
+			LocationType locationType) {
 		GooglePlaces client = new GooglePlaces(GOOGLE_KEY);
 
 		final Param[] params = {new Param("rankBy").value("distance"), new
-				Param("types").value(tipoLocal.getApiType())};
+				Param("types").value(locationType.getApiType())};
 		final List<se.walkercrou.places.Place> nearbyPlaces = client
 				.getNearbyPlaces(latitude, longitude, DEFAULT_RADIUS,
 						DEFAULT_NUMBER_OF_RESULTS, params);
@@ -34,7 +34,7 @@ public class PlaceService {
 				longitude, GOOGLE_KEY)).sorted().collect(Collectors.toList());
 	}
 
-	public List<Place> getPlaces(String address, TipoLocal tipoLocal) {
+	public List<Place> getPlaces(String address, LocationType locationType) {
 		GooglePlaces client = new GooglePlaces(GOOGLE_KEY);
 		final List<se.walkercrou.places.Place> placesByQuery = client
 				.getPlacesByQuery(address, DEFAULT_NUMBER_OF_RESULTS);
@@ -43,7 +43,7 @@ public class PlaceService {
 		}
 		// by the default, the address is a single place
 		se.walkercrou.places.Place place = placesByQuery.get(0);
-		return getPlaces(place.getLatitude(), place.getLongitude(), tipoLocal);
+		return getPlaces(place.getLatitude(), place.getLongitude(), locationType);
 	}
 
 }

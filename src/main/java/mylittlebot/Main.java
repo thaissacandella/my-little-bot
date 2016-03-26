@@ -1,7 +1,7 @@
 package mylittlebot;
 
 import mylittlebot.bot.*;
-import mylittlebot.service.BotmotorClient;
+import mylittlebot.service.TelegramClient;
 import mylittlebot.service.UrlShortnerService;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -71,13 +71,13 @@ public class Main {
 	private static Message extractMessage(JsonObject message) {
 		long userId = message.get("chat").getAsJsonObject().get("id").getAsLong();
 		if (message.get("text") != null) {
-			return new MessageText(message.get("text").getAsString(), userId);
+			return new TextMessage(message.get("text").getAsString(), userId);
 		} else {
 			final JsonObject location = message.getAsJsonObject("location");
 			if (location != null) {
 				final double latitude = location.get("latitude").getAsDouble();
 				final double longitude = location.get("longitude").getAsDouble();
-				return new MessageLocation(latitude, longitude, userId);
+				return new LocationMessage(latitude, longitude, userId);
 			}
 		}
 		return null;
@@ -89,7 +89,7 @@ public class Main {
 
 	private static void sendPhoto(long chatId,
 			String photoUrl) throws UnsupportedEncodingException {
-		BotmotorClient client = new BotmotorClient().withEndpoint
+		TelegramClient client = new TelegramClient().withEndpoint
 				("/sendPhoto").withGetParameters("?chat_id=" + chatId +
 				"&photo=" + URLEncoder.encode(photoUrl, "UTF-8"));
 
@@ -99,7 +99,7 @@ public class Main {
 
 	private static void sendLocation(long chatId, double latitude,
 			double longitude) {
-		BotmotorClient client = new BotmotorClient().withEndpoint
+		TelegramClient client = new TelegramClient().withEndpoint
 				("/sendLocation").withGetParameters("?chat_id=" + chatId +
 				"&latitude=" + latitude + "&longitude=" + longitude);
 
@@ -110,7 +110,7 @@ public class Main {
 	private static void sendResponse(long chatId, String text) throws IOException {
 		System.out.println(chatId + ": " + text);
 
-		BotmotorClient client = new BotmotorClient().withEndpoint
+		TelegramClient client = new TelegramClient().withEndpoint
 				("/sendmessage").withGetParameters("?chat_id=" + chatId +
 				"&text=" + (text == null ? "null" : URLEncoder.encode(text,
 				"UTF-8")));
@@ -120,7 +120,7 @@ public class Main {
 	}
 
 	private static String getUpdates() {
-		BotmotorClient client = new BotmotorClient().withEndpoint
+		TelegramClient client = new TelegramClient().withEndpoint
 				("/getupdates").withGetParameters("?offset=" + LAST_MESSAGE);
 
 		String response = client.getSingleResult(String.class);

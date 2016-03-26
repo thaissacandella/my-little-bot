@@ -6,34 +6,34 @@ import java.util.List;
 
 public class UserSession {
 
-	private Etapa etapa = Etapa.ESCOLHA_TIPO_LOCAL;
-	private TipoLocal tipoLocalEscolhido;
+	private Stage stage = Stage.CHOOSE_TYPE_LOCATION;
+	private LocationType locationType;
 
 	private double latitude;
 	private double longitude;
 
 	private List<Place> places;
-	private int placeEscolhido;
+	private int place;
 
-	public TipoLocal getTipoLocalEscolhido() {
-		return tipoLocalEscolhido;
+	public LocationType getLocationType() {
+		return locationType;
 	}
 
-	public void setLocation(MessageLocation l) {
-		this.latitude = l.getLatitude();
-		this.longitude = l.getLongitude();
+	public void setLocation(LocationMessage locationMessage) {
+		this.latitude = locationMessage.getLatitude();
+		this.longitude = locationMessage.getLongitude();
 	}
 
-	public void setTipoLocalEscolhido(TipoLocal tipoLocalEscolhido) {
-		this.tipoLocalEscolhido = tipoLocalEscolhido;
+	public void setLocationType(LocationType locationType) {
+		this.locationType = locationType;
 	}
 
-	public Etapa getEtapa() {
-		return etapa;
+	public Stage getStage() {
+		return stage;
 	}
 
-	public void setEtapa(Etapa etapa) {
-		this.etapa = etapa;
+	public void setStage(Stage stage) {
+		this.stage = stage;
 	}
 
 	public double getLatitude() {
@@ -52,11 +52,11 @@ public class UserSession {
 		return places.get(i);
 	}
 
-	public void setPlaceEscolhido(int placeEscolhido) {
-		this.placeEscolhido = placeEscolhido;
+	public void setPlace(int place) {
+		this.place = place;
 	}
 
-	public int getPlaceEscolhido() {
-		return placeEscolhido;
+	public int getPlace() {
+		return place;
 	}
 }

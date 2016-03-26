@@ -10,7 +10,7 @@ import javax.ws.rs.Encoded;
 import javax.ws.rs.HttpMethod;
 
 @Encoded
-public final class BotmotorClient {
+public final class TelegramClient {
 
 	private static final String BASE_URL = "https://api.telegram.org/";
 	private static final String BOT_TOKEN = "bot203071488:AAEtQXHGZjBLPKeFsFj1dWFkaOM3jZDk8YY";
@@ -20,15 +20,15 @@ public final class BotmotorClient {
 	private String HTTP_METHOD = HttpMethod.GET;
 	private String getParameters;
 
-	public BotmotorClient() {
+	public TelegramClient() {
 	}
 
-	public BotmotorClient withEndpoint(String endpoint) {
+	public TelegramClient withEndpoint(String endpoint) {
 		this.endpoint = endpoint;
 		return this;
 	}
 
-	public BotmotorClient withGetParameters(String parameters) {
+	public TelegramClient withGetParameters(String parameters) {
 		this.getParameters = parameters;
 		return this;
 	}

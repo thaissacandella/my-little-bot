@@ -21,88 +21,86 @@ public class MainBot {
 	}
 
 	public List<Response> process(Message m) {
-		if (m instanceof MessageText) {
-			MessageText messageText = (MessageText) m;
-			if (messageText.getText() == null) {
+		if (m instanceof TextMessage) {
+			TextMessage textMessage = (TextMessage) m;
+			if (textMessage.getText() == null) {
 				return null;
 			}
-			if (!messageText.getText().startsWith("/")) {
+			if (!textMessage.getText().startsWith("/")) {
 				return null;
 			}
-			if (messageText.getText().endsWith(BOT_NAME)) {
-				messageText.setText(messageText.getText().substring(0,
-						messageText.getText().length() - BOT_NAME.length()));
+			if (textMessage.getText().endsWith(BOT_NAME)) {
+				textMessage.setText(textMessage.getText().substring(0,
+						textMessage.getText().length() - BOT_NAME.length()));
 			}
-			System.out.println(messageText.getText());
+			if ("/start".equals(textMessage.getText())) {
 
-			if ("/start".equals(messageText.getText())) {
+				String ret;
 
-				String retorno;
-
-				if (dados.containsKey(messageText.getUserId())) {
-					retorno = "E agora, o que você procura?";
+				if (dados.containsKey(textMessage.getUserId())) {
+					ret = "E agora, o que você procura?";
 				} else {
-					retorno = "E ai, o que você está procurando?";
+					ret = "E ai, o que você está procurando?";
 				}
-				dados.put(messageText.getUserId(), new UserSession());
+				dados.put(textMessage.getUserId(), new UserSession());
 
-				return r(retorno + "\n" +
+				return r(ret + "\n" +
 						"Digite /restaurantes para buscarmos restaurantes \n" +
 						"Digite /cafes para buscarmos Cafés \n" +
 						"Digite /bares para buscarmos bares");
 			}
 
-			if (!dados.containsKey(messageText.getUserId())) {
+			if (!dados.containsKey(textMessage.getUserId())) {
 				return r("Digite /start para comerçarmos");
 			}
 
-			UserSession sessao = dados.get(messageText.getUserId());
+			UserSession session = dados.get(textMessage.getUserId());
 
-			if (sessao.getEtapa() == Etapa.ESCOLHA_TIPO_LOCAL) {
-				if (!Pattern.matches("/.*", messageText.getText())) {
+			if (session.getStage() == Stage.CHOOSE_TYPE_LOCATION) {
+				if (!Pattern.matches("/.*", textMessage.getText())) {
 					return null;
 				}
 
-				String valor = messageText.getText().substring(1);
+				String value = textMessage.getText().substring(1);
 
-				TipoLocal tipoLocal;
+				LocationType locationType;
 				try {
-					tipoLocal = TipoLocal.valueOf(valor.toUpperCase());
+					locationType = LocationType.valueOf(value.toUpperCase());
 				} catch (IllegalArgumentException e) {
 					return null;
 				}
 
-				sessao.setTipoLocalEscolhido(tipoLocal);
-				sessao.setEtapa(Etapa.ENVIE_LOCALIZ);
+				session.setLocationType(locationType);
+				session.setStage(Stage.SEND_LOCATION);
 
 				return r("Envie a sua localização");
 			}
 
-			if (sessao.getEtapa() == Etapa.ESCOLHA_LOCAL) {
-				if (!Pattern.matches("/opcao\\d", messageText.getText())) {
+			if (session.getStage() == Stage.CHOOSE_LOCATION) {
+				if (!Pattern.matches("/opcao\\d", textMessage.getText())) {
 					return null;
 				}
 				
-				int valor = Integer.parseInt(messageText.getText().substring(6));
-				sessao.setPlaceEscolhido(valor);
-				Place p = sessao.getPlace(valor);
-				Response details = new Response(p.toDetail());
-				Response location = new Response(p.getLatitude().doubleValue(), p.getLongitude().doubleValue());
-				if (p.getImgUrl() != null) {
-					Response photo = Response.photo(p.getImgUrl());
+				int valor = Integer.parseInt(textMessage.getText().substring(6));
+				session.setPlace(valor);
+				Place place = session.getPlace(valor);
+				Response details = new Response(place.toDetail());
+				Response location = new Response(place.getLatitude().doubleValue(), place.getLongitude().doubleValue());
+				if (place.getImgUrl() != null) {
+					Response photo = Response.photo(place.getImgUrl());
 					return Arrays.asList(photo, details, location);
 				}
 				return Arrays.asList(details, location);
 			}
-		} else if (m instanceof MessageLocation) {
+		} else if (m instanceof LocationMessage) {
 			UserSession sessao = dados.get(m.getUserId());
 			if (sessao == null) {
 				return null;
 			}
-			if (sessao.getEtapa() == Etapa.ENVIE_LOCALIZ) {
-				sessao.setLocation((MessageLocation) m);
-				sessao.setEtapa(Etapa.ESCOLHA_LOCAL);
-				List<Place> places = new PlaceService().getPlaces(sessao.getLatitude(), sessao.getLongitude(), sessao.getTipoLocalEscolhido());
+			if (sessao.getStage() == Stage.SEND_LOCATION) {
+				sessao.setLocation((LocationMessage) m);
+				sessao.setStage(Stage.CHOOSE_LOCATION);
+				List<Place> places = new PlaceService().getPlaces(sessao.getLatitude(), sessao.getLongitude(), sessao.getLocationType());
 				sessao.setPlaces(places);
 				AtomicInteger a = new AtomicInteger(0);
 				return r("Esses são os locais próximos e suas distâncias:\n" + places.stream().map(l -> "/opcao" + a.incrementAndGet() + " " + l.toLine()).collect(Collectors.joining("\n")));

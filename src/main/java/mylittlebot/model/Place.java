@@ -21,7 +21,7 @@ public final class Place implements Comparable<Place> {
 	private String imgUrl;
 
 	public Place(se.walkercrou.places.Place place, double latitudeOrigin,
-			double longitueOrigin, String apiKey) {
+			double longitudeOrigin, String apiKey) {
 		this.name = place.getName();
 		this.types = place.getTypes();
 		this.address = place.getAddress();
@@ -32,7 +32,7 @@ public final class Place implements Comparable<Place> {
 		this.longitude = BigDecimal.valueOf(place.getLongitude());
 		this.status = place.getStatus();
 		this.rating = BigDecimal.valueOf(place.getRating());
-		this.distanceBetweenOrigin = distFrom(latitudeOrigin, longitueOrigin,
+		this.distanceBetweenOrigin = distFrom(latitudeOrigin, longitudeOrigin,
 				place.getLatitude(), place.getLongitude());
 
 		try {

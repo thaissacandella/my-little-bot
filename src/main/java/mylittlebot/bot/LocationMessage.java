@@ -1,11 +1,11 @@
 package mylittlebot.bot;
 
-public final class MessageLocation extends Message {
+public final class LocationMessage extends Message {
 
 	private final double latitude;
 	private final double longitude;
 
-	public MessageLocation(double latitude, double longitude, long userId) {
+	public LocationMessage(double latitude, double longitude, long userId) {
 		super(userId);
 		this.latitude = latitude;
 		this.longitude = longitude;
@@ -21,6 +21,6 @@ public final class MessageLocation extends Message {
 
 	@Override
 	public String toString() {
-		return "MessageLocation{ latitude=" + latitude +", longitude="+ longitude +'}';
+		return "LocationMessage{ latitude=" + latitude +", longitude="+ longitude +'}';
 	}
 }
