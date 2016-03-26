@@ -14,10 +14,10 @@ import java.util.stream.Collectors;
 public class MainBot {
 
 	public static final String BOT_NAME = "@my_little_friend_bot";
-	private final Map<Long, UserSession> dados = new HashMap<>();
+	private final Map<Long, UserSession> data = new HashMap<>();
 
 	public List<Response> r(String s) {
-		return Arrays.asList(new Response(s));
+		return Arrays.asList(new TextResponse(s));
 	}
 
 	public List<Response> process(Message m) {
@@ -37,12 +37,12 @@ public class MainBot {
 
 				String ret;
 
-				if (dados.containsKey(textMessage.getUserId())) {
+				if (data.containsKey(textMessage.getUserId())) {
 					ret = "E agora, o que você procura?";
 				} else {
 					ret = "E ai, o que você está procurando?";
 				}
-				dados.put(textMessage.getUserId(), new UserSession());
+				data.put(textMessage.getUserId(), new UserSession());
 
 				return r(ret + "\n" +
 						"Digite /restaurantes para buscarmos restaurantes \n" +
@@ -50,11 +50,11 @@ public class MainBot {
 						"Digite /bares para buscarmos bares");
 			}
 
-			if (!dados.containsKey(textMessage.getUserId())) {
+			if (!data.containsKey(textMessage.getUserId())) {
 				return r("Digite /start para comerçarmos");
 			}
 
-			UserSession session = dados.get(textMessage.getUserId());
+			UserSession session = data.get(textMessage.getUserId());
 
 			if (session.getStage() == Stage.CHOOSE_TYPE_LOCATION) {
 				if (!Pattern.matches("/.*", textMessage.getText())) {
@@ -77,31 +77,31 @@ public class MainBot {
 			}
 
 			if (session.getStage() == Stage.CHOOSE_LOCATION) {
-				if (!Pattern.matches("/opcao\\d", textMessage.getText())) {
+				if (!Pattern.matches("/option\\d", textMessage.getText())) {
 					return null;
 				}
 				
-				int valor = Integer.parseInt(textMessage.getText().substring(6));
-				session.setPlace(valor);
-				Place place = session.getPlace(valor);
-				Response details = new Response(place.toDetail());
-				Response location = new Response(place.getLatitude().doubleValue(), place.getLongitude().doubleValue());
+				int value = Integer.parseInt(textMessage.getText().substring(6));
+				session.setPlace(value);
+				Place place = session.getPlace(value);
+				TextResponse details = new TextResponse(place.toDetail());
+				LocationResponse location = new LocationResponse(place.getLatitude().doubleValue(), place.getLongitude().doubleValue());
 				if (place.getImgUrl() != null) {
-					Response photo = Response.photo(place.getImgUrl());
+					TextResponse photo = new TextResponse(place.getImgUrl());
 					return Arrays.asList(photo, details, location);
 				}
 				return Arrays.asList(details, location);
 			}
 		} else if (m instanceof LocationMessage) {
-			UserSession sessao = dados.get(m.getUserId());
-			if (sessao == null) {
+			UserSession session = data.get(m.getUserId());
+			if (session == null) {
 				return null;
 			}
-			if (sessao.getStage() == Stage.SEND_LOCATION) {
-				sessao.setLocation((LocationMessage) m);
-				sessao.setStage(Stage.CHOOSE_LOCATION);
-				List<Place> places = new PlaceService().getPlaces(sessao.getLatitude(), sessao.getLongitude(), sessao.getLocationType());
-				sessao.setPlaces(places);
+			if (session.getStage() == Stage.SEND_LOCATION) {
+				session.setLocation((LocationMessage) m);
+				session.setStage(Stage.CHOOSE_LOCATION);
+				List<Place> places = new PlaceService().getPlaces(session.getLatitude(), session.getLongitude(), session.getLocationType());
+				session.setPlaces(places);
 				AtomicInteger a = new AtomicInteger(0);
 				return r("Esses são os locais próximos e suas distâncias:\n" + places.stream().map(l -> "/opcao" + a.incrementAndGet() + " " + l.toLine()).collect(Collectors.joining("\n")));
 			}

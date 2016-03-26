@@ -8,9 +8,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -47,19 +44,7 @@ public class Main {
 					continue;
 				}
 				for (Response r : rs) {
-					switch (r.getResponseType()) {
-						case TEXT:
-							sendResponse(m.getUserId(), r.getTexto());
-							break;
-						case LOCATION:
-							sendLocation(m.getUserId(), r.getLatitude(), r
-									.getLongitude());
-							break;
-						case PHOTO:
-							sendResponse(m.getUserId(), new UrlShortnerService
-									().shortUrl(r.getPhoto()));
-							break;
-					}
+					r.send(m.getUserId());
 				}
 			}
 
@@ -85,38 +70,6 @@ public class Main {
 
 	private static JsonObject parse(String result) {
 		return (JsonObject) new JsonParser().parse(result);
-	}
-
-	private static void sendPhoto(long chatId,
-			String photoUrl) throws UnsupportedEncodingException {
-		TelegramClient client = new TelegramClient().withEndpoint
-				("/sendPhoto").withGetParameters("?chat_id=" + chatId +
-				"&photo=" + URLEncoder.encode(photoUrl, "UTF-8"));
-
-		String response = client.getSingleResult(String.class);
-		System.out.println(response);
-	}
-
-	private static void sendLocation(long chatId, double latitude,
-			double longitude) {
-		TelegramClient client = new TelegramClient().withEndpoint
-				("/sendLocation").withGetParameters("?chat_id=" + chatId +
-				"&latitude=" + latitude + "&longitude=" + longitude);
-
-		String response = client.getSingleResult(String.class);
-		System.out.println(response);
-	}
-
-	private static void sendResponse(long chatId, String text) throws IOException {
-		System.out.println(chatId + ": " + text);
-
-		TelegramClient client = new TelegramClient().withEndpoint
-				("/sendmessage").withGetParameters("?chat_id=" + chatId +
-				"&text=" + (text == null ? "null" : URLEncoder.encode(text,
-				"UTF-8")));
-
-		String response = client.getSingleResult(String.class);
-		System.out.println(response);
 	}
 
 	private static String getUpdates() {
