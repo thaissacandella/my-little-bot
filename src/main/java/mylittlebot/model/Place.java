@@ -114,15 +114,9 @@ public final class Place implements Comparable<Place> {
 
 	@Override
 	public String toString() {
-		return "Place{" +
-				"name='" + name + '\'' +
-				", types=" + types +
-				", latitude=" + latitude +
-				", longitude=" + longitude +
-				", status=" + status +
-				", rating=" + rating +
-				", distanceBetweenOrigin=" + distanceBetweenOrigin +
-				'}';
+		return "Place{name='" + name + '\'' +", types=" + types +", latitude=" + latitude +
+				", longitude=" + longitude +", status=" + status +", rating=" + rating +
+				", distanceBetweenOrigin=" + distanceBetweenOrigin +'}';
 	}
 
 	public String toLine() {

@@ -18,9 +18,7 @@ import java.util.Set;
 public class Main {
 
 	private static final Set<Long> IDS = new HashSet<>();
-	private static final boolean THA_MODE = true;
 	private static MainBot BOT = new MainBot();
-	private static ThaBot THA_BOT = new ThaBot();
 	private static int LAST_MESSAGE = 1358;
 
 	public static void main(String[] args) throws Exception {
