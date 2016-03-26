@@ -1,4 +1,4 @@
-package br.com.botmotor.service;
+package mylittlebot.service;
 
 import static com.rosaloves.bitlyj.Bitly.as;
 import static com.rosaloves.bitlyj.Bitly.shorten;

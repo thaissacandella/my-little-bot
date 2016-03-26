@@ -1,6 +1,6 @@
-package br.com.botmotor.bot;
+package mylittlebot.bot;
 
-import br.com.botmotor.model.Place;
+import mylittlebot.model.Place;
 
 import java.util.List;
 

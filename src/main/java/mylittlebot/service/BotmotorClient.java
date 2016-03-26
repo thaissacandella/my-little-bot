@@ -1,4 +1,4 @@
-package br.com.botmotor.service;
+package mylittlebot.service;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;

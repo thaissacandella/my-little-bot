@@ -1,8 +1,8 @@
-package br.com.botmotor;
+package mylittlebot;
 
-import br.com.botmotor.bot.*;
-import br.com.botmotor.service.BotmotorClient;
-import br.com.botmotor.service.UrlShortnerService;
+import mylittlebot.bot.*;
+import mylittlebot.service.BotmotorClient;
+import mylittlebot.service.UrlShortnerService;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

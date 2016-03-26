@@ -1,4 +1,4 @@
-package br.com.botmotor.bot;
+package mylittlebot.bot;
 
 public abstract class Message {
 	/*

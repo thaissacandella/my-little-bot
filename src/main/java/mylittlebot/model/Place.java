@@ -1,4 +1,4 @@
-package br.com.botmotor.model;
+package mylittlebot.model;
 
 import se.walkercrou.places.Status;
 
