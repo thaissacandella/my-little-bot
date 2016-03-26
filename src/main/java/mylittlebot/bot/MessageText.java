@@ -19,8 +19,6 @@ public final class MessageText extends Message {
 
 	@Override
 	public String toString() {
-		return "MessageText{" +
-				"text='" + text + '\'' +
-				'}';
+		return "MessageText{text='"+ text +'\''+'}';
 	}
 }

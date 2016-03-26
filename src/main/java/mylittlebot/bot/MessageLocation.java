@@ -21,9 +21,7 @@ public final class MessageLocation extends Message {
 
 	@Override
 	public String toString() {
-		return "MessageLocation{" +
-				"latitude=" + latitude +
-				", longitude=" + longitude +
-				'}';
+		return "MessageLocation{ latitude=" + latitude +
+				", longitude="+ longitude +'}';
 	}
 }
