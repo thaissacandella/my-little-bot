@@ -6,10 +6,6 @@ import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * @author "<a href='jpbassinello@gmail.com'>João Paulo Bassinello</a>"
- */
-
 public final class Place implements Comparable<Place> {
 	private final String name;
 	private final List<String> types;

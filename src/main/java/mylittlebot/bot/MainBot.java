@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class MainBot {
 
-	public static final String BOT_NAME = "@botmoter_bot";
+	public static final String BOT_NAME = "@my_little_friend_bot";
 	private final Map<Long, UserSession> dados = new HashMap<>();
 
 	public List<Response> r(String s) {
@@ -58,7 +58,6 @@ public class MainBot {
 
 			UserSession sessao = dados.get(messageText.getUserId());
 
-			System.out.println("------------------------" + sessao.getEtapa());
 			if (sessao.getEtapa() == Etapa.ESCOLHA_TIPO_LOCAL) {
 				if (!Pattern.matches("/.*", messageText.getText())) {
 					return null;
@@ -89,7 +88,6 @@ public class MainBot {
 				Place p = sessao.getPlace(valor);
 				Response details = new Response(p.toDetail());
 				Response location = new Response(p.getLatitude().doubleValue(), p.getLongitude().doubleValue());
-				System.out.println("----------------------------------------" + p.getImgUrl());
 				if (p.getImgUrl() != null) {
 					Response photo = Response.photo(p.getImgUrl());
 					return Arrays.asList(photo, details, location);

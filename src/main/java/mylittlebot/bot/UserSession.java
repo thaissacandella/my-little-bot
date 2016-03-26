@@ -4,9 +4,6 @@ import mylittlebot.model.Place;
 
 import java.util.List;
 
-/**
- * Created by luan on 3/19/16.
- */
 public class UserSession {
 
 	private Etapa etapa = Etapa.ESCOLHA_TIPO_LOCAL;

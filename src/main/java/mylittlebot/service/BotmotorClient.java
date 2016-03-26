@@ -9,15 +9,11 @@ import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import javax.ws.rs.Encoded;
 import javax.ws.rs.HttpMethod;
 
-/**
- * @author "<a href='jpbassinello@gmail.com'>João Paulo Bassinello</a>"
- */
 @Encoded
 public final class BotmotorClient {
 
 	private static final String BASE_URL = "https://api.telegram.org/";
-	private static final String BOT_TOKEN =
-			"bot198737376:AAFrs1DR7fBwsYvKj_jDW6lZvwlOULFE9Y0";
+	private static final String BOT_TOKEN = "bot203071488:AAEtQXHGZjBLPKeFsFj1dWFkaOM3jZDk8YY";
 	private static final String DEFAULT_CHARSET = "UTF-8";
 	private static final int TIMEOUT = 20000;
 	private String endpoint;

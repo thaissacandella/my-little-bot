@@ -2,9 +2,6 @@ package mylittlebot.bot;
 
 import se.walkercrou.places.Types;
 
-/**
- * Created by luan on 3/19/16.
- */
 public enum TipoLocal {
 	RESTAURANTES(Types.TYPE_RESTAURANT),
 	CAFES(Types.TYPE_CAFE),

@@ -1,8 +1,5 @@
 package mylittlebot.bot;
 
-/**
- * Created by luan on 3/19/16.
- */
 public class Response {
 	private String texto;
 	private double latitude;
